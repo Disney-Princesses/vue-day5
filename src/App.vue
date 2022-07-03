@@ -2,7 +2,7 @@
   <div>
     <TodoHeader @add="addFn"></TodoHeader>
     <TodoMain :list="list" @delList="delFn"></TodoMain>
-    <TodoFooter></TodoFooter>
+    <TodoFooter :count='count'></TodoFooter>
   </div>
 </template>
 
@@ -39,6 +39,11 @@ export default {
     delFn(id) {
       const index = this.list.findIndex(ele => ele.id === id);
       this.list.splice(index, 1);
+    }
+  },
+  computed:{
+    count(){
+      return this.list.length
     }
   }
 };
