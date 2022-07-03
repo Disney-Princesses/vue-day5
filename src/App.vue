@@ -1,28 +1,71 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <TodoHeader @add="addFn"></TodoHeader>
+    <TodoMain :list="showSel" @del="delFn" ></TodoMain>
+    <TodoFooter :count="count" @isSel='isSelFn'></TodoFooter>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import TodoHeader from "./components/TodoHeader.vue";
+import TodoMain from "./components/TodoMain.vue";
+import TodoFooter from "./components/TodoFooter.vue";
 export default {
-  name: 'App',
   components: {
-    HelloWorld
+    TodoHeader,
+    TodoMain,
+    TodoFooter,
+  },
+  data() {
+    return {
+      list:JSON.parse(localStorage.getItem('list'))||[],
+      getSel:'',
+    };
+  },
+  methods: {
+    addFn(val) {
+      const id = this.list[this.list.length - 1]
+        ? this.list[this.list.length - 1].id + 1
+        : 100;
+      this.list.push({
+        id: this.list[this.list.length - 1].id + 1,
+        name: val,
+        isDone: false,
+      });
+    },
+    delFn(val) {
+      const index = this.list.findIndex((ele) => ele.id == val);
+      this.list.splice(index, 1);
+    },
+    isSelFn(val){
+      this.getSel=val;
+    }
+
+  },
+  computed:{
+    count(){//为什么count一定要用computed
+      return this.list.filter(ele=>!ele.isDone).length;
+    },
+    showSel(){//为什么要用computed
+      if(this.getSel=='no'){
+        return this.list.filter(ele=>!ele.isDone)
+      }else if(this.getSel=='yes'){
+        return this.list.filter(ele=>ele.isDone)
+      }else{
+        return this.list;
+      }
+    }
+  },
+  watch:{
+    list:{
+      deep:true,
+      handler(newList){
+        localStorage.setItem("list",JSON.stringify(newList||[]));
+      }
+    }
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
