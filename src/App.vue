@@ -24,7 +24,7 @@ export default {
   components: {
     TodoHeader,
     TodoMain,
-    TodoFooter
+    TodoFooter,
   },
   methods: {
     addFn(val) {
