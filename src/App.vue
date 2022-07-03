@@ -60,7 +60,6 @@ export default {
     showList() {
       if (this.getSet == 'no') {
         return this.list.filter((item) => !item.isDone)
-
       } else if (this.getSet == 'yes') {
         return this.list.filter((item) => item.isDone)
       } else {
