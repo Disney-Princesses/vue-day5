@@ -1,8 +1,8 @@
 <template>
   <div>
     <TodoHeader @add="addFn"></TodoHeader>
-    <TodoMain :list="list" @delList="delFn"></TodoMain>
-    <TodoFooter :count='count'></TodoFooter>
+    <TodoMain :list="showrList" @delList="delFn"></TodoMain>
+    <TodoFooter :count='count' @filterList='filterListFn'></TodoFooter>
   </div>
 </template>
 
@@ -13,11 +13,12 @@ import TodoFooter from "./components/TodoFooter";
 export default {
   data() {
     return {
-      list: [
+      list:[
         { id: 100, name: "吃饭", isDone: true },
-        { id: 101, name: "睡觉", isDone: false },
-        { id: 102, name: "打豆豆", isDone: true }
-      ]
+        { id: 201, name: "睡觉", isDone: false },
+        { id: 103, name: "打豆豆", isDone: true },
+      ],
+      getSel:'all'
     };
   },
   components: {
@@ -39,11 +40,23 @@ export default {
     delFn(id) {
       const index = this.list.findIndex(ele => ele.id === id);
       this.list.splice(index, 1);
+    },
+    filterListFn(val) {
+      this.getSel = val
     }
   },
   computed:{
     count(){
-      return this.list.length
+      return this.list.filter(ele => !ele.isDone).length
+    },
+    showrList() {
+      if(this.getSel=='yes') {
+        return this.list.filter(ele => ele.isDone)
+      } else if(this.getSel=='no') {
+        return this.list.filter(ele => !ele.isDone)
+      } else {
+        return this.list
+      }
     }
   }
 };
