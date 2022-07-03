@@ -1,10 +1,16 @@
 <template>
   <header class="header">
     <h1>todos</h1>
-    <input id="toggle-all" class="toggle-all" type="checkbox" />
+    <input id="toggle-all" class="toggle-all" type="checkbox" v-model="isAll" />
     <label for="toggle-all"></label>
     <!-- label 可以关联一个表单标签 -->
-    <input class="new-todo" placeholder="输入任务名称-回车确认" autofocus @keydown.enter="enter" v-model.trim="newList"/>
+    <input
+      class="new-todo"
+      placeholder="输入任务名称-回车确认"
+      autofocus
+      @keydown.enter="enter"
+      v-model.trim="newList"
+    />
   </header>
 </template>
 
@@ -12,17 +18,27 @@
 export default {
   data() {
     return {
-      newList:''
+      newList: ""
+    };
+  },
+  methods: {
+    enter() {
+      if (this.newList.length === 0) {
+        return alert("请输入内容");
+      }
+      this.$emit("add", this.newList);
+      // console.log(this.newList);
+      this.newList = "";
     }
   },
-  methods:{
-    enter() {
-      if(this.newList.length===0) {
-        return alert('请输入内容')
+  computed: {
+    isAll: {
+      get() {
+        return this.$parent.list.every(ele => ele.isDone);
+      },
+      set(val) {
+        this.$parent.list.forEach(ele => (ele.isDone = val));
       }
-      this.$emit('add',this.newList)
-      // console.log(this.newList);
-      this.newList=''
     }
   }
 };
