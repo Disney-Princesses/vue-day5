@@ -1,8 +1,8 @@
 <template>
   <div>
     <TodoHeader @add="addFn"></TodoHeader>
-    <TodoMain :list="showrList" @delList="delFn"></TodoMain>
-    <TodoFooter :count='count' @filterList='filterListFn'></TodoFooter>
+    <TodoMain :list="shownList" @delList="delFn"></TodoMain>
+    <TodoFooter :count='count' @filterList='filterListFn' @clearList='clearFn'></TodoFooter>
   </div>
 </template>
 
@@ -43,13 +43,16 @@ export default {
     },
     filterListFn(val) {
       this.getSel = val
+    },
+    clearFn() {
+      return this.list.forEach(ele => ele.isDone =false)
     }
   },
   computed:{
     count(){
       return this.list.filter(ele => !ele.isDone).length
     },
-    showrList() {
+    shownList() {
       if(this.getSel=='yes') {
         return this.list.filter(ele => ele.isDone)
       } else if(this.getSel=='no') {
