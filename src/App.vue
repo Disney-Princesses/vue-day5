@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TodoHeader ></TodoHeader>
+    <TodoHeader @add='addFn'></TodoHeader>
     <TodoMain :list="list"></TodoMain>
     <TodoFooter></TodoFooter>
   </div>
@@ -24,6 +24,16 @@ components:{
   TodoHeader,
   TodoMain,
   TodoFooter
+},
+methods:{
+  addFn(val) {
+    const id = this.list[this.list.length-1]? this.list[this.list.length-1].id +1:100
+    this.list.push({
+      id,
+      name:val,
+      isDone:false
+    })
+  }
 }
 }
 </script>
